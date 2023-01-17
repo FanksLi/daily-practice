@@ -49,3 +49,38 @@ var myAtoi = function (s) {
     return result * sign;
 };
 ~~~
+
+### 二维数组中的查找
+在一个 n * m 的二维数组中，每一行都按照从左到右 非递减 的顺序排序，每一列都按照从上到下 非递减 的顺序排序。请完成一个高效的函数，输入这样的一个二维数组和一个整数，判断数组中是否含有该整数。
+~~~javascript
+/**
+ * @param {number[][]} matrix
+ * @param {number} target
+ * @return {boolean}
+ */
+var findNumberIn2DArray = function(matrix, target) {
+    
+    for(let arr of matrix) {
+        const index = search(arr, target);
+        if(index !== -1) return true;
+    }
+        return false;
+};
+
+function search(data, target) {
+    let low = 0, high = data.length - 1;
+    while(low <= high) {
+        const mid = low + ((high - low) >> 1);
+        const num = data[mid];
+        console.log(num);
+        if(num === target) {
+            return mid;
+        } else if(num > target) {
+            high = mid - 1;
+        } else if(num < target) {
+            low = mid + 1;
+        }
+    }
+    return -1;
+}
+~~~
