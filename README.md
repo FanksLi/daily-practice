@@ -84,3 +84,59 @@ function search(data, target) {
     return -1;
 }
 ~~~
+
+### 重建二叉树
+题目：
+
+输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。假设输入的前序遍历和中序遍历的结果中都不含重复的数字。例如输
+入前序遍历序列 {1,2,4,7,3,5,6,8} 和中序遍历序列 {4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+
+思路：
+利用递归的思想来求解，首先先序序列中的第一个元素一定是根元素。然后我们去中序遍历中寻找到该元素的位置，找到后该元素的左
+边部分就是根节点的左子树，右边部分就是根节点的右子树。因此我们可以分别截取对应的部分进行子树的递归构建。使用这种方式的
+时间复杂度为 O(n)，空间复杂度为 O(logn)。
+~~~javascript
+/**
+ * Definition for a binary tree node.
+ * function TreeNode(val) {
+ *     this.val = val;
+ *     this.left = this.right = null;
+ * }
+ */
+/**
+ * @param {number[]} preorder
+ * @param {number[]} inorder
+ * @return {TreeNode}
+ */
+var buildTree = function(preorder, inorder) {
+    if(preorder === null || preorder.length === 0) return null;
+
+    const root = new TreeNode(preorder[0]);
+    const stack = [];
+
+    stack.push(root);
+
+    let index = 0;
+
+    for(let i = 1; i < preorder.length; i++){
+        const val = preorder[i];
+
+        let node = stack[stack.length - 1];
+
+        if(node.val !== inorder[index]) {
+            node.left = new TreeNode(val);
+            stack.push(node.left);
+        } else {
+            while(stack.length > 0 && stack[stack.length - 1].val === inorder[index]) {
+                node = stack.pop();
+                index++;
+            }
+
+            node.right = new TreeNode(val);
+            stack.push(node.right);
+        }
+    }
+
+    return root;
+};
+~~~
